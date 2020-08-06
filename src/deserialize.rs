@@ -265,6 +265,7 @@ impl<'s> FromPyObject<'s> for LorentzVector<Complex<f64>> {
     }
 }
 
+#[cfg(feature = "cpython_support")]
 impl<'s> FromPyObject<'s> for LorentzVector<f64> {
     fn extract(py: Python, obj: &'s PyObject) -> PyResult<Self> {
         let seq = obj.cast_as::<PySequence>(py)?;
