@@ -8,10 +8,16 @@ version = "0.1.0"
 dual_num_support = ["dual_num"]
 pyo3_support = ["pyo3"]
 serde_support = ["serde"]
+f128_support = ["f128"]
+cpython_support = ["cpython"]
 
 [dependencies.pyo3]
 optional = true
 version = "0.11.1"
+
+[dependencies.cpython]
+optional = true
+version = "0.5"
 
 [dependencies.serde]
 features = ["derive"]
