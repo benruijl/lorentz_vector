@@ -1,0 +1,31 @@
+[package]
+authors = ["Ben Ruijl <benruyl@gmail.com>"]
+edition = "2018"
+name = "lorentz_vector"
+version = "0.1.0"
+
+[features]
+dual_num_support = ["dual_num"]
+pyo3_support = ["pyo3"]
+serde_support = ["serde"]
+
+[dependencies.pyo3]
+optional = true
+version = "0.11.1"
+
+[dependencies.serde]
+features = ["derive"]
+optional = true
+version = "1.0"
+
+[dependencies.dual_num]
+branch = "dualn"
+git = "https://github.com/benruijl/dual_num"
+optional = true
+
+[dependencies.f128]
+git = "https://github.com/benruijl/f128"
+optional = true
+
+[dependencies]
+num = "0.3"
