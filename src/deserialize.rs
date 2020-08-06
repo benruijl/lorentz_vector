@@ -13,7 +13,7 @@ use std::marker::PhantomData;
 #[cfg(feature = "pyo3_support")]
 use pyo3::types::{PyAny, PyFloat, PyList, PySequence, PyTuple};
 #[cfg(feature = "pyo3_support")]
-use pyo3::{FromPyObject, PyObject, PyResult, Python, ToPyObject};
+use pyo3::{FromPyObject, IntoPy, PyObject, PyResult, Python, ToPyObject};
 
 #[cfg(feature = "cpython_support")]
 use cpython::{
@@ -68,6 +68,14 @@ impl<'de, T: Field + Deserialize<'de>> Deserialize<'de> for LorentzVector<T> {
 }
 
 #[cfg(feature = "pyo3_support")]
+impl IntoPy<PyObject> for LorentzVector<f64> {
+    #[inline]
+    fn into_py(self, py: Python) -> PyObject {
+        self.to_object(py)
+    }
+}
+
+#[cfg(feature = "pyo3_support")]
 impl ToPyObject for LorentzVector<f64> {
     fn to_object(&self, py: Python) -> PyObject {
         PyList::new(
@@ -80,6 +88,14 @@ impl ToPyObject for LorentzVector<f64> {
             ],
         )
         .to_object(py)
+    }
+}
+
+#[cfg(feature = "pyo3_support")]
+impl IntoPy<PyObject> for LorentzVector<Complex<f64>> {
+    #[inline]
+    fn into_py(self, py: Python) -> PyObject {
+        self.to_object(py)
     }
 }
 
