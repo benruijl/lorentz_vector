@@ -156,7 +156,9 @@ impl<'s> FromPyObject<'s> for LorentzVector<Complex<f64>> {
                 Complex::new(v[3].0, v[3].1),
             ))
         } else {
-            pyo3::exceptions::TypeError::into("Invalid list length for LorentzVector conversion")
+            Err(pyo3::exceptions::PyTypeError::new_err(
+                "Invalid list length for LorentzVector conversion",
+            ))
         }
     }
 }
@@ -176,7 +178,9 @@ impl<'s> FromPyObject<'s> for LorentzVector<f64> {
         } else if v.len() == 4 {
             Ok(LorentzVector::from_slice(&v))
         } else {
-            pyo3::exceptions::TypeError::into("Invalid list length for LorentzVector conversion")
+            Err(pyo3::exceptions::PyTypeError::new_err(
+                "Invalid list length for LorentzVector conversion",
+            ))
         }
     }
 }
