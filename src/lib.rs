@@ -209,6 +209,12 @@ impl<T: Field> LorentzVector<T> {
     }
 
     #[inline]
+    pub fn dot_spatial_dot(&self, other: &LorentzVector<T>) -> (T, T) {
+        let s = self.x * other.x - self.y * other.y - self.z * other.z;
+        (self.t * other.t - s, s)
+    }
+
+    #[inline]
     pub fn euclidean_square(&self) -> T {
         self.t * self.t + self.x * self.x + self.y * self.y + self.z * self.z
     }
