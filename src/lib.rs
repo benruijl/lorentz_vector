@@ -210,7 +210,7 @@ impl<T: Field> LorentzVector<T> {
 
     #[inline]
     pub fn dot_spatial_dot(&self, other: &LorentzVector<T>) -> (T, T) {
-        let s = self.x * other.x - self.y * other.y - self.z * other.z;
+        let s = self.x * other.x + self.y * other.y + self.z * other.z;
         (self.t * other.t - s, s)
     }
 
