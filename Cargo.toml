@@ -2,7 +2,7 @@
 authors = ["Ben Ruijl <benruyl@gmail.com>"]
 edition = "2018"
 name = "lorentz_vector"
-version = "0.1.0"
+version = "0.1.1"
 
 [features]
 dual_num_support = ["dual_num"]
@@ -13,7 +13,7 @@ cpython_support = ["cpython"]
 
 [dependencies.pyo3]
 optional = true
-version = "0.12"
+version = "0.13"
 
 [dependencies.cpython]
 optional = true
