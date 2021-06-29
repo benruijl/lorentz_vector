@@ -266,6 +266,16 @@ impl<T: Field> LorentzVector<T> {
             z: self.z.into(),
         }
     }
+
+    #[inline]
+    pub fn add_signed(&mut self, other: &LorentzVector<T>, sign: i8) -> LorentzVector<T> {
+        match sign {
+            0 => self.clone(),
+            1 => *self + other,
+            -1 => *self - other,
+            _ => unreachable!("Sign is not -1,0,1"),
+        }
+    }
 }
 
 impl<T: Field + ToPrimitive> LorentzVector<T> {
@@ -280,7 +290,7 @@ impl<T: Field + ToPrimitive> LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field + MulAdd<Output = T>> LorentzVector<T> {
+impl<T: Field + MulAdd<Output = T>> LorentzVector<T> {
     #[inline]
     pub fn square_impr(&self) -> T {
         self.t.mul_add(self.t, -self.spatial_squared_impr())
@@ -318,7 +328,7 @@ impl<'a, T: Field> Neg for &'a LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Neg for LorentzVector<T> {
+impl<T: Field> Neg for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -364,7 +374,7 @@ impl<'a, T: Field> Add<&'a LorentzVector<T>> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Add<LorentzVector<T>> for LorentzVector<T> {
+impl<T: Field> Add<LorentzVector<T>> for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -373,7 +383,7 @@ impl<'a, T: Field> Add<LorentzVector<T>> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> AddAssign<LorentzVector<T>> for LorentzVector<T> {
+impl<T: Field> AddAssign<LorentzVector<T>> for LorentzVector<T> {
     #[inline]
     fn add_assign(&mut self, other: LorentzVector<T>) {
         self.t += other.t;
@@ -383,9 +393,29 @@ impl<'a, T: Field> AddAssign<LorentzVector<T>> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> SubAssign<LorentzVector<T>> for LorentzVector<T> {
+impl<'a, T: Field> AddAssign<&'a LorentzVector<T>> for LorentzVector<T> {
+    #[inline]
+    fn add_assign(&mut self, other: &LorentzVector<T>) {
+        self.t += other.t;
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
+    }
+}
+
+impl<T: Field> SubAssign<LorentzVector<T>> for LorentzVector<T> {
     #[inline]
     fn sub_assign(&mut self, other: LorentzVector<T>) {
+        self.t -= other.t;
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
+    }
+}
+
+impl<'a, T: Field> SubAssign<&'a LorentzVector<T>> for LorentzVector<T> {
+    #[inline]
+    fn sub_assign(&mut self, other: &LorentzVector<T>) {
         self.t -= other.t;
         self.x -= other.x;
         self.y -= other.y;
@@ -416,7 +446,7 @@ impl<'a, T: Field> Sub<LorentzVector<T>> for &'a LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Sub<LorentzVector<T>> for LorentzVector<T> {
+impl<T: Field> Sub<LorentzVector<T>> for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -462,7 +492,7 @@ impl<'a, T: RealField> Mul<f64> for &'a LorentzVector<T> {
     }
 }
 
-impl<'a, T: RealField> Mul<f64> for LorentzVector<T> {
+impl<T: RealField> Mul<f64> for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -476,7 +506,7 @@ impl<'a, T: RealField> Mul<f64> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Mul<T> for LorentzVector<T> {
+impl<T: Field> Mul<T> for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -500,7 +530,7 @@ impl<'a, T: Field> Div<T> for &'a LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Div<T> for LorentzVector<T> {
+impl<T: Field> Div<T> for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -510,7 +540,7 @@ impl<'a, T: Field> Div<T> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: Field> Inv for LorentzVector<T> {
+impl<T: Field> Inv for LorentzVector<T> {
     type Output = LorentzVector<T>;
 
     #[inline]
@@ -552,7 +582,7 @@ impl<'a, T: RealNumberLike> Sub<&'a LorentzVector<T>> for LorentzVector<Complex<
     }
 }
 
-impl<'a, T: RealNumberLike> Sub<LorentzVector<T>> for LorentzVector<Complex<T>> {
+impl<T: RealNumberLike> Sub<LorentzVector<T>> for LorentzVector<Complex<T>> {
     type Output = LorentzVector<Complex<T>>;
 
     #[inline]
@@ -594,7 +624,7 @@ impl<'a, T: RealNumberLike> Add<&'a LorentzVector<T>> for LorentzVector<Complex<
     }
 }
 
-impl<'a, T: RealNumberLike> Add<LorentzVector<T>> for LorentzVector<Complex<T>> {
+impl<T: RealNumberLike> Add<LorentzVector<T>> for LorentzVector<Complex<T>> {
     type Output = LorentzVector<Complex<T>>;
 
     #[inline]
@@ -608,7 +638,7 @@ impl<'a, T: RealNumberLike> Add<LorentzVector<T>> for LorentzVector<Complex<T>> 
     }
 }
 
-impl<'a, T: Field> MulAssign<T> for LorentzVector<T> {
+impl<T: Field> MulAssign<T> for LorentzVector<T> {
     #[inline]
     fn mul_assign(&mut self, other: T) {
         self.t *= other;
@@ -618,7 +648,7 @@ impl<'a, T: Field> MulAssign<T> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: RealField> MulAssign<f64> for LorentzVector<T> {
+impl<T: RealField> MulAssign<f64> for LorentzVector<T> {
     #[inline]
     fn mul_assign(&mut self, other: f64) {
         self.t *= other;
@@ -740,7 +770,7 @@ impl<T: RealField> Add<LorentzVector<f64>> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: RealField> AddAssign<LorentzVector<f64>> for LorentzVector<T> {
+impl<T: RealField> AddAssign<LorentzVector<f64>> for LorentzVector<T> {
     #[inline]
     fn add_assign(&mut self, other: LorentzVector<f64>) {
         self.t += other.t;
@@ -750,7 +780,7 @@ impl<'a, T: RealField> AddAssign<LorentzVector<f64>> for LorentzVector<T> {
     }
 }
 
-impl<'a, T: RealField> SubAssign<LorentzVector<f64>> for LorentzVector<T> {
+impl<T: RealField> SubAssign<LorentzVector<f64>> for LorentzVector<T> {
     #[inline]
     fn sub_assign(&mut self, other: LorentzVector<f64>) {
         self.t -= other.t;

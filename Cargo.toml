@@ -2,7 +2,7 @@
 authors = ["Ben Ruijl <benruyl@gmail.com>"]
 edition = "2018"
 name = "lorentz_vector"
-version = "0.1.1"
+version = "0.1.2"
 
 [features]
 dual_num_support = ["dual_num"]

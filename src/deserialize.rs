@@ -1,4 +1,14 @@
+#[cfg(any(
+    feature = "serde_support",
+    feature = "pyo3_support",
+    feature = "cpython_support"
+))]
 use crate::{Field, LorentzVector};
+#[cfg(any(
+    feature = "serde_support",
+    feature = "pyo3_support",
+    feature = "cpython_support"
+))]
 use num::Complex;
 
 #[cfg(feature = "serde_support")]
