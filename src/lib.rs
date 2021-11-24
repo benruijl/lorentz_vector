@@ -1,12 +1,12 @@
-#[cfg(feature = "dual_num_support")]
-use dual_num::{Allocator, DefaultAllocator, Dim, DimName, DualN, Owned};
+#[cfg(feature = "hyperdual_support")]
+use hyperdual::{Hyperdual, FloatConst};
 use num::traits::ops::mul_add::MulAdd;
 use num::traits::Inv;
 use num::traits::{NumAssign, NumOps, NumRef};
 use num::Complex;
 use num::Float;
 use num::Num;
-#[cfg(feature = "dual_num_support")]
+#[cfg(feature = "hyperdual_support")]
 use num::Signed;
 use num::{NumCast, ToPrimitive};
 use std::fmt;
@@ -63,25 +63,16 @@ impl RealNumberLike for f32 {}
 #[cfg(feature = "f128_support")]
 impl RealNumberLike for f128::f128 {}
 
-#[cfg(feature = "dual_num_support")]
-impl<U, T: RealNumberLike + dual_num::FloatConst + Signed + 'static> RealNumberLike for DualN<T, U>
-where
-    U: Dim + DimName,
-    DefaultAllocator: Allocator<T, U>,
-    Owned<T, U>: Copy,
+#[cfg(feature = "hyperdual_support")]
+impl<T: RealNumberLike + FloatConst + Signed + 'static, const U: usize> RealNumberLike
+    for Hyperdual<T, U>
 {
 }
 
 impl<T: RealNumberLike> Field for num::Complex<T> {}
 
-#[cfg(feature = "dual_num_support")]
-impl<U, T: RealNumberLike + Signed + 'static> Field for DualN<T, U>
-where
-    U: Dim + DimName,
-    DefaultAllocator: Allocator<T, U>,
-    Owned<T, U>: Copy,
-{
-}
+#[cfg(feature = "hyperdual_support")]
+impl<T: RealNumberLike + Signed + 'static, const U: usize> Field for Hyperdual<T, U> {}
 
 /// A generalization of a field with the reals as a basic component, with partial ordering
 /// An example of a `RealField` is a dual.
@@ -1023,13 +1014,8 @@ impl<T: RealNumberLike> LorentzVector<Complex<T>> {
     }
 }
 
-#[cfg(feature = "dual_num_support")]
-impl<U: dual_num::Dim + dual_num::DimName, T: RealNumberLike + Signed + 'static>
-    LorentzVector<DualN<T, U>>
-where
-    dual_num::DefaultAllocator: dual_num::Allocator<T, U>,
-    dual_num::Owned<T, U>: Copy,
-{
+#[cfg(feature = "hyperdual_support")]
+impl<T: RealNumberLike + Signed + 'static, const U: usize> LorentzVector<Hyperdual<T, U>> {
     #[inline]
     pub fn real(&self) -> LorentzVector<T> {
         self.map(|x| x.real())
